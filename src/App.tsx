@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import LoginPage from './pages/LoginPage';
-import AppPage from './pages/AppPage';
+import TodoPage from './pages/TodoPage';
 import Header from './components/Header';
 import RegistrationPage from './pages/RegistrationPage';
 import { Div, Group } from '@vkontakte/vkui';
@@ -20,7 +20,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Navigate replace to="/login" />} />
           <Route path="/login" element={<LoginPage getAvatarUrl={getAvatarUrl} />} />
-          <Route path="/app" element={<AppPage />} />
+          <Route path="/app" element={<TodoPage />} />
           <Route path="/reg" element={<RegistrationPage />} />
         </Routes>
       </Group>
