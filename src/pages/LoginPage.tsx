@@ -1,23 +1,23 @@
 import React from 'react';
-import Form from '../components/Form';
+import Login from '../components/Login';
 import LoginButtons from '../components/LoginButtons';
+import { Link } from 'react-router-dom';
 import {
   getAuth,
   signInWithPopup,
   GithubAuthProvider,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
   GoogleAuthProvider,
   AuthProvider,
 } from 'firebase/auth';
 import { Div, Title } from '@vkontakte/vkui';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 interface LoginPageProps {
   getAvatarUrl: (url: string) => void;
 }
 
 function LoginPage({ getAvatarUrl }: LoginPageProps) {
+  const navigate = useNavigate();
   const authLogin = (event: React.MouseEvent) => {
     const target = event.target as HTMLDivElement;
     const id = target.closest('button')!.id;
@@ -38,16 +38,7 @@ function LoginPage({ getAvatarUrl }: LoginPageProps) {
         const user = result.user;
         if (user.photoURL) getAvatarUrl(user.photoURL);
         console.log(user);
-      })
-      .catch(console.error);
-  };
-
-  const handleLogin = (email: string, password: string) => {
-    const auth = getAuth();
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        console.log(user);
+        navigate('/app');
       })
       .catch(console.error);
   };
@@ -60,7 +51,7 @@ function LoginPage({ getAvatarUrl }: LoginPageProps) {
           {/*Login or <Link href="/reg"> Create Account </Link>*/}
         </Title>
       </Div>
-      <Form handleClick={handleLogin} />
+      <Login />
       <Div>
         <LoginButtons authClick={authLogin} />
       </Div>

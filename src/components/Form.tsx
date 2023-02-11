@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { Button, FormLayout, FormItem, Input, FormLayoutGroup } from '@vkontakte/vkui';
 
 interface FormProps {
+  title: string;
   handleClick: (email: string, password: string) => void;
 }
 
-function Form({ handleClick }: FormProps) {
+function Form({ title, handleClick }: FormProps) {
   const [email, setEmail] = useState('');
   const [pass, setPass] = useState('');
 
@@ -30,7 +31,7 @@ function Form({ handleClick }: FormProps) {
         </FormItem>
         <FormItem>
           <Button size="l" onClick={() => handleClick(email, pass)} stretched>
-            Sign In
+            {title}
           </Button>
         </FormItem>
       </FormLayoutGroup>
