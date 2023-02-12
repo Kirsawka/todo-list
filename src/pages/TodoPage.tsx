@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
 import TodoList from '../components/TodoList';
 import TodoForm from '../components/TodoForm';
-import { v4 as uuidv4 } from 'uuid';
 
 function TodoPage() {
   const [text, setText] = useState('');
-  const [todos, setTodos] = useState<{ id: string; text: string; isCompleted: boolean }[]>([]);
+  const [todos, setTodos] = useState<{ id: number; text: string; isCompleted: boolean }[]>([]);
 
   const addTodoHandler = () => {
     if (text) {
       const newTodo = {
-        id: uuidv4(),
+        id: todos[todos.length - 1] ? todos[todos.length - 1].id + 1 : 0,
         text: text,
         isCompleted: false,
       };
@@ -19,11 +18,11 @@ function TodoPage() {
     }
   };
 
-  const deleteTodoHandler = (id: string) => {
+  const deleteTodoHandler = (id: number) => {
     setTodos(todos.filter((todo) => todo.id !== id));
   };
 
-  const toggleTodoHandler = (id: string) => {
+  const toggleTodoHandler = (id: number) => {
     setTodos(
       todos.map((todo) =>
         todo.id === id ? { ...todo, isCompleted: !todo.isCompleted } : { ...todo }

@@ -3,9 +3,9 @@ import Todo from './Todo';
 import { List } from '@vkontakte/vkui';
 
 interface TodoListProps {
-  todos: { id: string; text: string; isCompleted: boolean }[];
-  deleteTodo: (id: string) => void;
-  toggleTodo: (id: string) => void;
+  todos: { id: number; text: string; isCompleted: boolean }[];
+  deleteTodo: (id: number) => void;
+  toggleTodo: (id: number) => void;
 }
 
 function TodoList({ todos, deleteTodo, toggleTodo }: TodoListProps) {
