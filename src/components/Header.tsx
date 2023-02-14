@@ -1,18 +1,34 @@
 import React from 'react';
-import { Avatar, Title, Div } from '@vkontakte/vkui';
+import UserAvatar from './UserAvatar';
+import { Title, Div, Button } from '@vkontakte/vkui';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
+import { setUser, setUserTodos } from '../store/reducers/user';
+import { useNavigate } from 'react-router-dom';
 
-interface HeaderProps {
-  avatarSrc: string;
-}
+function Header() {
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.user.value);
+  const navigate = useNavigate();
 
-function Header({ avatarSrc }: HeaderProps) {
+  const logOutUser = () => {
+    dispatch(setUser({ id: '', photoURL: '' }));
+    dispatch(setUserTodos([]));
+    localStorage.removeItem('id');
+    navigate('/login');
+  };
+
   return (
     <Div>
       <Title level="1" style={{ marginBottom: 26 }}>
         TODO App
       </Title>
-      {avatarSrc && (
-        <Avatar size={64} src={avatarSrc} style={{ position: 'absolute', right: 24, top: 20 }} />
+      {user.userId && (
+        <>
+          <UserAvatar />
+          <Button style={{ position: 'absolute', right: 24, top: 90 }} onClick={logOutUser}>
+            Log Out
+          </Button>
+        </>
       )}
     </Div>
   );

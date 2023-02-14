@@ -11,12 +11,47 @@ import {
 } from 'firebase/auth';
 import { Div, Title } from '@vkontakte/vkui';
 import { useNavigate } from 'react-router-dom';
+import { getDatabase, onValue, ref, set } from 'firebase/database';
+import { useAppDispatch } from 'store/hooks';
+import { setUser, setUserTodos } from 'store/reducers/user';
+import { database } from '../firebase';
 
-interface LoginPageProps {
-  getAvatarUrl: (url: string) => void;
-}
+function LoginPage() {
+  const dispatch = useAppDispatch();
 
-function LoginPage({ getAvatarUrl }: LoginPageProps) {
+  const writeUserData = (
+    userId: string,
+    photoURL: string | null,
+    todos: { id: number; text: string; isCompleted: boolean }[] | null
+  ) => {
+    const db = getDatabase();
+    const reference = ref(db, userId);
+    set(reference, {
+      photoURL: photoURL,
+      todos: todos,
+    });
+  };
+
+  const getUserData = (id: string, photoURL: string | null) => {
+    onValue(ref(database), (snapshot) => {
+      const data = snapshot.val();
+      if (data[`${id}`]) {
+        dispatch(
+          setUser({
+            id: id,
+            photoURL: data[`${id}`].photoURL ? data[`${id}`].photoURL : '',
+          })
+        );
+        dispatch(setUserTodos(data[`${id}`].todos ? data[`${id}`].todos : []));
+        navigate('/app');
+      } else {
+        dispatch(setUser({ id: id, photoURL: photoURL ? photoURL : '' }));
+        dispatch(setUserTodos([]));
+        writeUserData(id, photoURL ? photoURL : '', null);
+      }
+    });
+  };
+
   const navigate = useNavigate();
   const authLogin = (event: React.MouseEvent) => {
     const target = event.target as HTMLDivElement;
@@ -36,9 +71,8 @@ function LoginPage({ getAvatarUrl }: LoginPageProps) {
         const credential = GoogleAuthProvider.credentialFromResult(result);
         const token = credential!.accessToken;
         const user = result.user;
-        if (user.photoURL) getAvatarUrl(user.photoURL);
-        console.log(user);
-        navigate('/app');
+        getUserData(user.uid, user.photoURL);
+        localStorage.setItem('id', user.uid);
       })
       .catch(console.error);
   };
