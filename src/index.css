@@ -42,3 +42,8 @@ body {
 .link:hover {
   text-decoration: underline;
 }
+
+.item-exit-active {
+  opacity: 0;
+  transition: opacity .5s ease-out;
+}

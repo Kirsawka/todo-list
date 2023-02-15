@@ -1,6 +1,6 @@
 import React from 'react';
 import Todo from './Todo';
-import { List } from '@vkontakte/vkui';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 interface TodoListProps {
   todos: { id: number; text: string; isCompleted: boolean }[];
@@ -10,11 +10,13 @@ interface TodoListProps {
 
 function TodoList({ todos, deleteTodo, toggleTodo }: TodoListProps) {
   return (
-    <List>
+    <TransitionGroup component={null}>
       {todos.map((todo) => (
-        <Todo key={todo.id} todo={todo} deleteTodo={deleteTodo} toggleTodo={toggleTodo} />
+        <CSSTransition key={todo.id} timeout={700} classNames="item">
+          <Todo key={todo.id} todo={todo} deleteTodo={deleteTodo} toggleTodo={toggleTodo} />
+        </CSSTransition>
       ))}
-    </List>
+    </TransitionGroup>
   );
 }
 

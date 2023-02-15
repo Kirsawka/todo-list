@@ -5,23 +5,21 @@ import { AdaptivityProvider, ConfigProvider, AppRoot } from '@vkontakte/vkui';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux/es/exports';
 import { store } from 'store/store';
-import '@vkontakte/vkui/dist/vkui.css';
 import './firebase';
+import '@vkontakte/vkui/dist/vkui.css';
 import './index.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
-  <React.StrictMode>
-    <ConfigProvider>
-      <AdaptivityProvider>
-        <BrowserRouter basename="/">
-          <Provider store={store}>
-            <AppRoot>
-              <App />
-            </AppRoot>
-          </Provider>
-        </BrowserRouter>
-      </AdaptivityProvider>
-    </ConfigProvider>
-  </React.StrictMode>
+  <ConfigProvider>
+    <AdaptivityProvider>
+      <BrowserRouter basename="/">
+        <Provider store={store}>
+          <AppRoot>
+            <App />
+          </AppRoot>
+        </Provider>
+      </BrowserRouter>
+    </AdaptivityProvider>
+  </ConfigProvider>
 );
