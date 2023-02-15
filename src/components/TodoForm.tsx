@@ -10,7 +10,7 @@ interface TodoFormProps {
 
 function TodoForm({ text, addTodo, setText }: TodoFormProps) {
   return (
-    <FormItem style={{ marginTop: 50 }}>
+    <FormItem className="add-todo-form">
       <Input
         type="text"
         placeholder="add new todo"

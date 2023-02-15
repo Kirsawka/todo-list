@@ -19,13 +19,13 @@ function Header() {
 
   return (
     <Div>
-      <Title level="1" style={{ marginBottom: 26 }}>
+      <Title level="1" className="title">
         TODO App
       </Title>
       {user.userId && (
         <>
           <UserAvatar />
-          <Button style={{ position: 'absolute', right: 24, top: 90 }} onClick={logOutUser}>
+          <Button className="logout-btn" onClick={logOutUser}>
             Log Out
           </Button>
         </>

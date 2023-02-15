@@ -8,20 +8,11 @@ function UserAvatar() {
   return (
     <>
       {user.photoURL.length !== 0 ? (
-        <Avatar
-          size={64}
-          src={user.photoURL}
-          style={{ position: 'absolute', right: 24, top: 20 }}
-        />
+        <Avatar size={64} src={user.photoURL} className="user-avatar" />
       ) : (
-        <Avatar
-          size={48}
-          fallbackIcon={<Icon28Users />}
-          src="#"
-          style={{ position: 'absolute', right: 24, top: 20 }}
-        />
+        <Avatar size={48} fallbackIcon={<Icon28Users />} src="#" className="user-avatar" />
       )}
-      <Avatar size={64} src={user.photoURL} style={{ position: 'absolute', right: 24, top: 20 }} />
+      <Avatar size={64} src={user.photoURL} className="user-avatar" />
     </>
   );
 }

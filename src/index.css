@@ -9,3 +9,36 @@ body {
 .completedTodo {
   opacity: .2;
 }
+
+.title {
+  margin-bottom: 26px;
+}
+
+.logout-btn {
+  position: absolute;
+  right: 24px;
+  top: 90px;
+}
+
+.add-todo-form {
+  margin-top: 50px;
+}
+
+.user-avatar {
+  position: absolute;
+  right: 24px;
+  top: 20px;
+}
+
+.subtitle {
+  margin-bottom: 16px;
+}
+
+.link {
+  color: #2d81e0;
+  text-decoration: none;
+}
+
+.link:hover {
+  text-decoration: underline;
+}

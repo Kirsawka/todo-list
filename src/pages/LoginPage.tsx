@@ -88,9 +88,9 @@ function LoginPage() {
   return (
     <>
       <Div>
-        <Title level="2" style={{ marginBottom: 16 }}>
+        <Title level="2" className="subtitle">
           Login or{' '}
-          <Link to="/reg" style={{ color: '#2d81e0' }}>
+          <Link to="/reg" className="link">
             Create Account
           </Link>
         </Title>
