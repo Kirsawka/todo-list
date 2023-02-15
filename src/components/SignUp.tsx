@@ -2,26 +2,13 @@ import React from 'react';
 import Form from './Form';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import { ref, getDatabase, set } from 'firebase/database';
 import { setUser, setUserTodos } from '../store/reducers/user';
 import { useAppDispatch } from 'store/hooks';
+import { writeUserData } from '../utils/writeUserData';
 
 function SignUp() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-
-  const writeUserData = (
-    userId: string,
-    photoURL: string | null,
-    todos: { id: number; text: string; isCompleted: boolean }[] | null
-  ) => {
-    const db = getDatabase();
-    const reference = ref(db, userId);
-    set(reference, {
-      photoURL: photoURL,
-      todos: todos,
-    });
-  };
 
   const handleRegister = (email: string, password: string) => {
     const auth = getAuth();

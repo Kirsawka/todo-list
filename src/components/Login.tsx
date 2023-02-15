@@ -2,29 +2,37 @@ import React from 'react';
 import Form from './Form';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import { ref, onValue } from 'firebase/database';
 import { useAppDispatch } from 'store/hooks';
 import { setUser, setUserTodos } from 'store/reducers/user';
-import { database } from '../firebase';
+import { getUserData } from '../utils/getUserData';
 
 function Login() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const getUserData = (id: string | null) => {
-    onValue(ref(database), (snapshot) => {
-      const data = snapshot.val();
-      if (id && data[`${id}`]) {
-        dispatch(
-          setUser({
-            id: id,
-            photoURL: data[`${id}`].photoURL ? data[`${id}`].photoURL : '',
-          })
-        );
-        dispatch(setUserTodos(data[`${id}`].todos ? data[`${id}`].todos : []));
-        navigate('/app');
-      }
-    });
+  const navigateHandler = () => navigate('/app');
+
+  const setUserHandler = (
+    id: string,
+    dataId: {
+      photoURL: string | null;
+    }
+  ) => {
+    dispatch(
+      setUser({
+        id: id,
+        photoURL: dataId.photoURL ? dataId.photoURL : '',
+      })
+    );
+  };
+
+  const setTodosHandler = (
+    id: string,
+    dataId: {
+      todos: { id: number; text: string; isCompleted: boolean }[] | null;
+    }
+  ) => {
+    dispatch(setUserTodos(dataId.todos ? dataId.todos : []));
   };
 
   const handleLogin = (email: string, password: string) => {
@@ -32,7 +40,8 @@ function Login() {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-        getUserData(user.uid);
+        const id = user.uid;
+        getUserData({ id, setUserHandler, setTodosHandler, navigateHandler });
         localStorage.setItem('id', user.uid);
       })
       .catch(console.error);

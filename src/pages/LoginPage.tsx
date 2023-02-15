@@ -1,7 +1,7 @@
 import React from 'react';
 import Login from '../components/Login';
 import LoginButtons from '../components/LoginButtons';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   getAuth,
   signInWithPopup,
@@ -10,49 +10,47 @@ import {
   AuthProvider,
 } from 'firebase/auth';
 import { Div, Title } from '@vkontakte/vkui';
-import { useNavigate } from 'react-router-dom';
-import { getDatabase, onValue, ref, set } from 'firebase/database';
 import { useAppDispatch } from 'store/hooks';
 import { setUser, setUserTodos } from 'store/reducers/user';
-import { database } from '../firebase';
+import { getUserData } from '../utils/getUserData';
 
 function LoginPage() {
   const dispatch = useAppDispatch();
-
-  const writeUserData = (
-    userId: string,
-    photoURL: string | null,
-    todos: { id: number; text: string; isCompleted: boolean }[] | null
-  ) => {
-    const db = getDatabase();
-    const reference = ref(db, userId);
-    set(reference, {
-      photoURL: photoURL,
-      todos: todos,
-    });
-  };
-
-  const getUserData = (id: string, photoURL: string | null) => {
-    onValue(ref(database), (snapshot) => {
-      const data = snapshot.val();
-      if (data[`${id}`]) {
-        dispatch(
-          setUser({
-            id: id,
-            photoURL: data[`${id}`].photoURL ? data[`${id}`].photoURL : '',
-          })
-        );
-        dispatch(setUserTodos(data[`${id}`].todos ? data[`${id}`].todos : []));
-        navigate('/app');
-      } else {
-        dispatch(setUser({ id: id, photoURL: photoURL ? photoURL : '' }));
-        dispatch(setUserTodos([]));
-        writeUserData(id, photoURL ? photoURL : '', null);
-      }
-    });
-  };
-
   const navigate = useNavigate();
+
+  const setUserHandler = (
+    id: string,
+    dataId: {
+      photoURL: string | null;
+    }
+  ) => {
+    dispatch(
+      setUser({
+        id: id,
+        photoURL: dataId.photoURL ? dataId.photoURL : '',
+      })
+    );
+  };
+
+  const setTodosHandler = (
+    id: string,
+    dataId: {
+      todos: { id: number; text: string; isCompleted: boolean }[] | null;
+    }
+  ) => {
+    dispatch(setUserTodos(dataId.todos ? dataId.todos : []));
+  };
+
+  const setUserEmpty = (id: string, photoURL: string | null) => {
+    dispatch(setUser({ id: id, photoURL: photoURL ? photoURL : '' }));
+  };
+
+  const setTodosEmpty = () => {
+    dispatch(setUserTodos([]));
+  };
+
+  const navigateHandler = () => navigate('/app');
+
   const authLogin = (event: React.MouseEvent) => {
     const target = event.target as HTMLDivElement;
     const id = target.closest('button')!.id;
@@ -71,7 +69,17 @@ function LoginPage() {
         const credential = GoogleAuthProvider.credentialFromResult(result);
         const token = credential!.accessToken;
         const user = result.user;
-        getUserData(user.uid, user.photoURL);
+        const id = user.uid;
+        const photoURL = user.photoURL;
+        getUserData({
+          id,
+          photoURL,
+          setUserHandler,
+          setTodosHandler,
+          navigateHandler,
+          setUserEmpty,
+          setTodosEmpty,
+        });
         localStorage.setItem('id', user.uid);
       })
       .catch(console.error);
@@ -81,8 +89,10 @@ function LoginPage() {
     <>
       <Div>
         <Title level="2" style={{ marginBottom: 16 }}>
-          Login or <Link to="/reg">Create Account</Link>
-          {/*Login or <Link href="/reg"> Create Account </Link>*/}
+          Login or{' '}
+          <Link to="/reg" style={{ color: '#2d81e0' }}>
+            Create Account
+          </Link>
         </Title>
       </Div>
       <Login />

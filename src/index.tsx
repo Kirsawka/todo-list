@@ -14,7 +14,7 @@ root.render(
   <React.StrictMode>
     <ConfigProvider>
       <AdaptivityProvider>
-        <BrowserRouter>
+        <BrowserRouter basename="/">
           <Provider store={store}>
             <AppRoot>
               <App />

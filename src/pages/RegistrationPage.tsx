@@ -8,8 +8,10 @@ function RegistrationPage() {
     <>
       <Div>
         <Title level="2" style={{ marginBottom: 16 }}>
-          Create Account or <Link to="/login">Login</Link>
-          {/*Create Account or <Link href="/login"> Login </Link>*/}
+          Create Account or{' '}
+          <Link to="/login" style={{ color: '#2d81e0' }}>
+            Login
+          </Link>
         </Title>
       </Div>
       <SignUp />

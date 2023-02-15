@@ -3,25 +3,12 @@ import TodoList from '../components/TodoList';
 import TodoForm from '../components/TodoForm';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { setUserTodos } from 'store/reducers/user';
-import { getDatabase, ref, set } from 'firebase/database';
+import { writeUserData } from '../utils/writeUserData';
 
 function TodoPage() {
   const user = useAppSelector((state) => state.user.value);
   const [text, setText] = useState('');
   const dispatch = useAppDispatch();
-
-  const writeUserData = (
-    userId: string,
-    photoURL: string | null,
-    todos: { id: number; text: string; isCompleted: boolean }[]
-  ) => {
-    const db = getDatabase();
-    const reference = ref(db, userId);
-    set(reference, {
-      photoURL: photoURL,
-      todos: todos,
-    });
-  };
 
   const addTodoHandler = () => {
     if (text) {
