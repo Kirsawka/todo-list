@@ -10,7 +10,7 @@ interface TodoFormProps {
 
 function TodoForm({ text, addTodo, setText }: TodoFormProps) {
   return (
-    <FormItem className="add-todo-form">
+    <FormItem className="add-todo-form" onKeyDown={(e) => e.keyCode === 13 && addTodo()}>
       <Input
         type="text"
         placeholder="add new todo"
