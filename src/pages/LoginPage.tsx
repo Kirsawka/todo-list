@@ -13,6 +13,7 @@ import { Div, Title } from '@vkontakte/vkui';
 import { useAppDispatch } from 'store/hooks';
 import { setUser, setUserTodos } from 'store/reducers/user';
 import { getUserData } from '../utils/getUserData';
+import { setEmailError, setPassError } from '../store/reducers/errors';
 
 function LoginPage() {
   const dispatch = useAppDispatch();
@@ -82,13 +83,20 @@ function LoginPage() {
         });
         localStorage.setItem('id', user.uid);
       })
-      .catch(console.error);
+      .catch((err) => {});
   };
 
   return (
     <>
       <Div>
-        <Title level="2" className="subtitle">
+        <Title
+          level="2"
+          className="subtitle"
+          onClick={() => {
+            dispatch(setEmailError(''));
+            dispatch(setPassError(''));
+          }}
+        >
           Login or{' '}
           <Link to="/reg" className="link">
             Create Account

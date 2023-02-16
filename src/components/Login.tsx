@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from 'store/hooks';
 import { setUser, setUserTodos } from 'store/reducers/user';
 import { getUserData } from '../utils/getUserData';
+import { setEmailError, setPassError } from '../store/reducers/errors';
 
 function Login() {
   const navigate = useNavigate();
@@ -44,7 +45,26 @@ function Login() {
         getUserData({ id, setUserHandler, setTodosHandler, navigateHandler });
         localStorage.setItem('id', user.uid);
       })
-      .catch(console.error);
+      .catch((err) => {
+        switch (err.code) {
+          case 'auth/internal-error':
+            dispatch(setPassError('Enter password'));
+            dispatch(setEmailError(''));
+            break;
+          case 'auth/wrong-password':
+            dispatch(setPassError('Wrong password'));
+            dispatch(setEmailError(''));
+            break;
+          case 'auth/user-not-found':
+            dispatch(setEmailError('User not found'));
+            dispatch(setPassError(''));
+            break;
+          case 'auth/invalid-email':
+            dispatch(setEmailError('Invalid email'));
+            dispatch(setPassError(''));
+            break;
+        }
+      });
   };
 
   return <Form title="Sign In" handleClick={handleLogin} />;

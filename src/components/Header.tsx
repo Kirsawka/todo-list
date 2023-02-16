@@ -4,6 +4,7 @@ import { Title, Div, Button } from '@vkontakte/vkui';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { setUser, setUserTodos } from '../store/reducers/user';
 import { useNavigate } from 'react-router-dom';
+import { setEmailError, setPassError } from '../store/reducers/errors';
 
 function Header() {
   const dispatch = useAppDispatch();
@@ -13,6 +14,8 @@ function Header() {
   const logOutUser = () => {
     dispatch(setUser({ id: '', photoURL: '' }));
     dispatch(setUserTodos([]));
+    dispatch(setEmailError(''));
+    dispatch(setPassError(''));
     localStorage.removeItem('id');
     navigate('/login');
   };
