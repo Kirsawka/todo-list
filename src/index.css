@@ -50,17 +50,17 @@ body {
   text-decoration: underline;
 }
 
+.animate {
+  overflow: hidden;
+  transition: max-height .5s;
+  padding: 0;
+}
+
 .item-enter {
   opacity: 0;
 }
+
 .item-enter-active {
   opacity: 1;
   transition: all .3s ease-in;
-}
-.item-exit {
-  opacity: 1;
-}
-.item-exit-active {
-  opacity: 0;
-  transition: opacity .3s ease-in;
 }

@@ -9,6 +9,18 @@ function TodoPage() {
   const user = useAppSelector((state) => state.user.value);
   const [text, setText] = useState('');
   const dispatch = useAppDispatch();
+  let animationTimeout: ReturnType<typeof setTimeout>;
+
+  const animateDelete = (e: React.MouseEvent) => {
+    const animate = (e.target as HTMLElement).closest('.animate') as HTMLElement;
+    const animateContentHeight = animate.children[0].clientHeight;
+    animate.style.maxHeight = `${animateContentHeight}px`;
+    animate.classList.remove('open');
+    clearTimeout(animationTimeout);
+    animationTimeout = setTimeout(() => {
+      animate.style.maxHeight = '0';
+    }, 0);
+  };
 
   const addTodoHandler = () => {
     if (text) {
@@ -24,9 +36,11 @@ function TodoPage() {
   };
 
   const deleteTodoHandler = (id: number) => {
-    const todos = user.todos.filter((todo) => todo.id !== id);
-    dispatch(setUserTodos(todos));
-    writeUserData(user.userId, user.photoURL, todos);
+    setTimeout(() => {
+      const todos = user.todos.filter((todo) => todo.id !== id);
+      dispatch(setUserTodos(todos));
+      writeUserData(user.userId, user.photoURL, todos);
+    }, 1000);
   };
 
   const toggleTodoHandler = (id: number) => {
@@ -44,7 +58,12 @@ function TodoPage() {
   return (
     <>
       <TodoForm addTodo={addTodoHandler} setText={setTextHandler} text={text} />
-      <TodoList todos={user.todos} deleteTodo={deleteTodoHandler} toggleTodo={toggleTodoHandler} />
+      <TodoList
+        animate={animateDelete}
+        todos={user.todos}
+        deleteTodo={deleteTodoHandler}
+        toggleTodo={toggleTodoHandler}
+      />
     </>
   );
 }
