@@ -47,7 +47,7 @@ function App() {
   }, []);
 
   return (
-    <Div style={{ maxWidth: 700, margin: '0 auto' }}>
+    <Div className="app">
       <Group>
         <Header />
         <Routes>
