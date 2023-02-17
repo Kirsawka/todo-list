@@ -19,7 +19,7 @@ function Todo({ todo }: TodoProps) {
       const todos = user.todos.filter((todo) => todo.id !== id);
       dispatch(setUserTodos(todos));
       writeUserData(user.userId, user.photoURL, todos);
-    }, 500);
+    }, 0);
   };
 
   const toggleTodo = (id: number) => {
