@@ -9,7 +9,6 @@ import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { setUser, setUserTodos } from './store/reducers/user';
 import { useAppDispatch } from 'store/hooks';
 import '@vkontakte/vkui/dist/vkui.css';
-import './App.css';
 
 function App() {
   useNavigate();
